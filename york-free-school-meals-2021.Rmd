@@ -1,0 +1,99 @@
+---
+title: "Mapping free school meals in York, UK. 2021"
+output: html_notebook
+---
+
+
+
+# Task
+
+What can we learn about child poverty in York from published free school meals data?
+
+# Data Sources
+
+Data Source: https://data.yorkopendata.org/dataset/free-school-meals/resource/03b0ae33-f6fe-4431-94f8-4b811c8921ba
+
+# Data Preparation & Processing
+
+ * FSMTaken stops being recorded in 2018
+ * Schools are recorded multiple times with different names
+ * 9999 is used as a value for FSMTaken and TotalFSM when count <5 upto 2017
+
+# Analysis
+
+Load core libraries
+
+```{r}
+library(tidyverse)  #helps wrangle data
+library(ggplot2)  #helps visualize data
+```
+
+Load data:
+
+```{r}
+fsmraw <- read_csv("csv/fsmdetails.csv")
+```
+
+Remove FSMTaken as it stops being recorded in 2018:
+
+```{r}
+fsmdetails <- fsmraw %>% select(-FSMTaken)
+```
+
+Create pivot table 
+
+```{r}
+fsmdetails %>%
+  group_by(SchoolName, Year) %>%
+  summarise(SchoolName)
+
+```
+
+Wrong = Right
+All Saints RC = All Saints RC School	
+Applefields = Applefields School
+Archbishop Holgate's CE = Archbishop Holgates CE School	
+Archbishop of York's CE Junior School = Archbishop Of Yorks Ce Junior
+Badger Hill Primary = Badger Hill Primary School
+Canon Lee	= Canon Lee Specialist Arts College
+Fulford = Fulford School	
+Hob Moor Oaks	= Hob Moor Oaks School
+Huntington = Huntington Primary School	
+Huntington Primary School	 = Huntington Primary Academy	
+Joseph Rowntree	= Joseph Rowntree School	
+Lord Deramore's VC Primary School	= Lord Deramores Primary School	
+Manor CE = Manor CE Academy		
+Millthorpe = Millthorpe School	
+Our Lady Queen of Martyrs Primary School = Our Lady Queen of Martyrs RC Primary School		
+Park Grove Primary School	= Park Grove Primary Academy	
+Robert Wilkinson Academy Primary School	= Robert Wilkinson Primary School	
+Robert Wilkinson Primary Academy = Robert Wilkinson Primary School
+St Aelred's RCVA Primary = St Aelred's RC Primary School	
+St Aelreds Rc Primary School = St Aelred's RC Primary School	
+St Aelreds RC Primary School = St Aelred's RC Primary School
+St Barnabas C Of E Primary School = St Barnabas' CE Primary School	
+St Barnabas CE Primary School	= St Barnabas' CE Primary School
+St Georges Rc Primary School = St George's RC Primary School	
+St Georges RC Primary School = St George's RC Primary School
+St Lawrence's Primary School = St Lawrence's CE Primary School	
+St Lawrences CE Primary School = St Lawrence's CE Primary School
+St Marys CE Primary School = St Mary's CE Primary School
+St Marys Ce Primary School = St Mary's CE Primary School
+St Oswald's Primary School = St Oswald's CE Primary School	
+St Oswalds Ce Primary School = St Oswald's CE Primary School	
+St Oswalds CE Primary School = St Oswald's CE Primary School
+St Pauls Ce Primary School = St Paul's CE Primary School	
+St Pauls CE Primary School = St Paul's CE Primary School
+St Wilfrid's Primary School	= St Wilfrid's RC Primary School
+Stockton-on-the-Forest Primary School	= Stockton On The Forest Primary School	
+Vale of York = Vale of York Academy		
+Westfield Primary Community School = Westfield Community Primary School
+Wheldrake CE (Aided) School	= Wheldrake with Thorganby CE Primary School	
+Wheldrake with Thorganby C.E. (Aided) School = Wheldrake with Thorganby CE Primary School	
+York High	= York High School	
+
+# Key findings
+
+# Supporting visualisations
+
+# Top 3 Recommendations
