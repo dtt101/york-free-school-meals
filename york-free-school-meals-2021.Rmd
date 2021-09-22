@@ -17,7 +17,8 @@ Data Source: https://data.yorkopendata.org/dataset/free-school-meals/resource/03
 
  * FSMTaken stops being recorded in 2018
  * Schools are recorded multiple times with different names
- * 9999 is used as a value for FSMTaken and TotalFSM when count <5 upto 2017
+ * 9999 is used as a value for FSMTaken and TotalFSM when count <5 upto 2017; https://stackoverflow.com/questions/21187603/replace-characters-from-a-column-of-a-data-frame-r
+ * TotalFSM is a <chr> 
 
 # Analysis
 
@@ -48,6 +49,8 @@ fsmdetails %>%
   summarise(SchoolName)
 
 ```
+
+## Make school names consistent with the latest (2020)
 
 Wrong = Right
 All Saints RC = All Saints RC School	
@@ -91,6 +94,21 @@ Westfield Primary Community School = Westfield Community Primary School
 Wheldrake CE (Aided) School	= Wheldrake with Thorganby CE Primary School	
 Wheldrake with Thorganby C.E. (Aided) School = Wheldrake with Thorganby CE Primary School	
 York High	= York High School	
+
+## Replace value for <5 and 9999
+
+I have opted for 2 as a replacement value because it is the median of the value of less than 5.
+
+```{r}
+fsmdetails[fsmdetails == '9999'] <- '2'
+fsmdetails[fsmdetails == '<5'] <- '2'
+```
+
+## Change TotalFSM from <chr> to <int>
+
+```{r}
+fsmdetails$TotalFSM <- as.numeric(as.character(fsmdetails$TotalFSM))
+```
 
 # Key findings
 
