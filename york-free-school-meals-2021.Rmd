@@ -52,19 +52,53 @@ fsmdetails %>%
 
 ## Make school names consistent with the latest (2020)
 
-Wrong = Right
-All Saints RC = All Saints RC School	
-Applefields = Applefields School
-Archbishop Holgate's CE = Archbishop Holgates CE School	
-Archbishop of York's CE Junior School = Archbishop Of Yorks Ce Junior
-Badger Hill Primary = Badger Hill Primary School
-Canon Lee	= Canon Lee Specialist Arts College
-Fulford = Fulford School	
-Hob Moor Oaks	= Hob Moor Oaks School
-Huntington = Huntington Primary School	
-Huntington Primary School	 = Huntington Primary Academy	
-Joseph Rowntree	= Joseph Rowntree School	
-Lord Deramore's VC Primary School	= Lord Deramores Primary School	
+```{r}
+fsmdetails$SchoolName[fsmdetails$SchoolName == "All Saints RC"] <- "All Saints RC School"
+```
+
+
+```{r}
+oldSchool = c(
+  "All Saints RC",
+  "Applefields",
+  "Archbishop Holgate's CE",
+  "Archbishop of York's CE Junior School",
+  "Archbishop Of Yorks Ce Junior",
+  "Badger Hill Primary",
+  "Canon Lee",
+  "Fulford",
+  "Hob Moor Oaks",
+  "Huntington",
+  "Huntington Primary School",
+  "Joseph Rowntree",
+  "Lord Deramore's VC Primary School"
+)
+
+newSchool = c(
+  "All Saints RC School",
+  "Applefields School",
+  "Archbishop Holgates CE School",
+  "Archbishop Of Yorks CE Junior",
+  "Archbishop Of Yorks CE Junior",
+  "Badger Hill Primary School",
+  "Canon Lee Specialist Arts College",
+  "Fulford School",
+  "Hob Moor Oaks School",
+  "Huntington School",
+  "Huntington Primary Academy",
+  "Joseph Rowntree School",
+  "Lord Deramores Primary School"
+)
+
+renameSchools <- cbind(oldSchool, newSchool)
+for(i in 1:nrow(renameSchools)) {
+  oldName = renameSchools[i,][1]
+  newName  = renameSchools[i,][2]
+  fsmdetails$SchoolName[fsmdetails$SchoolName == oldName] <- newName
+}
+```
+
+
 Manor CE = Manor CE Academy		
 Millthorpe = Millthorpe School	
 Our Lady Queen of Martyrs Primary School = Our Lady Queen of Martyrs RC Primary School		
@@ -95,13 +129,13 @@ Wheldrake CE (Aided) School	= Wheldrake with Thorganby CE Primary School
 Wheldrake with Thorganby C.E. (Aided) School = Wheldrake with Thorganby CE Primary School	
 York High	= York High School	
 
-## Replace value for <5 and 9999
+## Replace values <5 and 9999 for 2 in TotalFSM
 
 I have opted for 2 as a replacement value because it is the median of the value of less than 5.
 
 ```{r}
-fsmdetails[fsmdetails == '9999'] <- '2'
-fsmdetails[fsmdetails == '<5'] <- '2'
+fsmdetails$TotalFSM[fsmdetails$TotalFSM == '9999'] <- '2'
+fsmdetails$TotalFSM[fsmdetails$TotalFSM == '<5'] <- '2'
 ```
 
 ## Change TotalFSM from <chr> to <int>
@@ -111,6 +145,8 @@ fsmdetails$TotalFSM <- as.numeric(as.character(fsmdetails$TotalFSM))
 ```
 
 # Key findings
+
+Look at percentage of pupils over time, as well as raw number
 
 # Supporting visualisations
 
