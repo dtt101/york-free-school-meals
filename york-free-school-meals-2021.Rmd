@@ -71,7 +71,13 @@ oldSchool = c(
   "Huntington",
   "Huntington Primary School",
   "Joseph Rowntree",
-  "Lord Deramore's VC Primary School"
+  "Lord Deramore's VC Primary School",
+  "Manor CE",
+  "Millthorpe",
+  "Our Lady Queen of Martyrs Primary School",
+  "Park Grove Primary School",
+  "Robert Wilkinson Academy Primary School",
+  "Robert Wilkinson Primary Academy"
 )
 
 newSchool = c(
@@ -87,7 +93,13 @@ newSchool = c(
   "Huntington School",
   "Huntington Primary Academy",
   "Joseph Rowntree School",
-  "Lord Deramores Primary School"
+  "Lord Deramores Primary School",
+  "Manor CE Academy",
+  "Millthorpe School",
+  "Our Lady Queen of Martyrs RC Primary School",
+  "Park Grove Primary Academy",
+  "Robert Wilkinson Primary School",
+  "Robert Wilkinson Primary School"
 )
 
 renameSchools <- cbind(oldSchool, newSchool)
@@ -99,12 +111,6 @@ for(i in 1:nrow(renameSchools)) {
 ```
 
 
-Manor CE = Manor CE Academy		
-Millthorpe = Millthorpe School	
-Our Lady Queen of Martyrs Primary School = Our Lady Queen of Martyrs RC Primary School		
-Park Grove Primary School	= Park Grove Primary Academy	
-Robert Wilkinson Academy Primary School	= Robert Wilkinson Primary School	
-Robert Wilkinson Primary Academy = Robert Wilkinson Primary School
 St Aelred's RCVA Primary = St Aelred's RC Primary School	
 St Aelreds Rc Primary School = St Aelred's RC Primary School	
 St Aelreds RC Primary School = St Aelred's RC Primary School
