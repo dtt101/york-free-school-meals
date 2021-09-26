@@ -3,22 +3,23 @@ title: "Mapping free school meals in York, UK. 2021"
 output: html_notebook
 ---
 
-
-
 # Task
 
-What can we learn about child poverty in York from published free school meals data?
+What can we learn about changes in school meal uptake in York from published free school meals data?
 
 # Data Sources
 
 Data Source: https://data.yorkopendata.org/dataset/free-school-meals/resource/03b0ae33-f6fe-4431-94f8-4b811c8921ba
+
+The data is published annually by York City Council, UK.
 
 # Data Preparation & Processing
 
  * FSMTaken stops being recorded in 2018
  * Schools are recorded multiple times with different names
  * 9999 is used as a value for FSMTaken and TotalFSM when count <5 upto 2017; https://stackoverflow.com/questions/21187603/replace-characters-from-a-column-of-a-data-frame-r
- * TotalFSM is a <chr> 
+ * TotalFSM is a <chr>
+ * Need to a add a new column showing TotalFSM as a percentage of TotalPupils
 
 # Analysis
 
@@ -35,17 +36,17 @@ Load data:
 fsmraw <- read_csv("csv/fsmdetails.csv")
 ```
 
-Remove FSMTaken as it stops being recorded in 2018:
+Remove FSMTaken column as it stops being recorded in 2018:
 
 ```{r}
 fsmdetails <- fsmraw %>% select(-FSMTaken)
 ```
 
-Create pivot table 
+Create pivot table to summarise data, making visual checking easier
 
 ```{r}
 fsmdetails %>%
-  group_by(SchoolName, Year) %>%
+  group_by(SchoolName, Year, TotalFSMPercentage) %>%
   summarise(SchoolName)
 
 ```
@@ -66,6 +67,7 @@ oldSchool = c(
   "Archbishop Of Yorks Ce Junior",
   "Badger Hill Primary",
   "Canon Lee",
+  "Dunnington Ce Primary School",
   "Fulford",
   "Hob Moor Oaks",
   "Huntington",
@@ -77,7 +79,31 @@ oldSchool = c(
   "Our Lady Queen of Martyrs Primary School",
   "Park Grove Primary School",
   "Robert Wilkinson Academy Primary School",
-  "Robert Wilkinson Primary Academy"
+  "Robert Wilkinson Primary Academy",
+  "St Aelred's RCVA Primary",
+  "St Aelreds Rc Primary School",
+  "St Aelreds RC Primary School",
+  "St Barnabas C Of E Primary School",
+  "St Barnabas CE Primary School",
+  "St George's Primary School",
+  "St Georges Rc Primary School",
+  "St Georges RC Primary School",
+  "St Lawrence's Primary School",
+  "St Lawrences CE Primary School",
+  "St Marys CE Primary School",
+  "St Marys Ce Primary School",
+  "St Oswald's Primary School",
+  "St Oswalds Ce Primary School",
+  "St Oswalds CE Primary School",
+  "St Pauls Ce Primary School",
+  "St Pauls CE Primary School",
+  "St Wilfrid's Primary School",
+  "Stockton-on-the-Forest Primary School",
+  "Vale of York",
+  "Westfield Primary Community School",
+  "Wheldrake CE (Aided) School",
+  "Wheldrake with Thorganby C.E. (Aided) School",
+  "York High"
 )
 
 newSchool = c(
@@ -88,6 +114,7 @@ newSchool = c(
   "Archbishop Of Yorks CE Junior",
   "Badger Hill Primary School",
   "Canon Lee Specialist Arts College",
+  "Dunnington CE Primary School",
   "Fulford School",
   "Hob Moor Oaks School",
   "Huntington School",
@@ -99,7 +126,31 @@ newSchool = c(
   "Our Lady Queen of Martyrs RC Primary School",
   "Park Grove Primary Academy",
   "Robert Wilkinson Primary School",
-  "Robert Wilkinson Primary School"
+  "Robert Wilkinson Primary School",
+  "St Aelred's RC Primary School",
+  "St Aelred's RC Primary School",
+  "St Aelred's RC Primary School",
+  "St Barnabas' CE Primary School",
+  "St Barnabas' CE Primary School",
+  "St George's RC Primary School",
+  "St George's RC Primary School",
+  "St George's RC Primary School",
+  "St Lawrence's CE Primary School",
+  "St Lawrence's CE Primary School",
+  "St Mary's CE Primary School",
+  "St Mary's CE Primary School",
+  "St Oswald's CE Primary School",
+  "St Oswald's CE Primary School",
+  "St Oswald's CE Primary School",
+  "St Paul's CE Primary School",
+  "St Paul's CE Primary School",
+  "St Wilfrid's RC Primary School",
+  "Stockton On The Forest Primary School",
+  "Vale of York Academy",
+  "Westfield Community Primary School",
+  "Wheldrake with Thorganby CE Primary School",
+  "Wheldrake with Thorganby CE Primary School",
+  "York High School"
 )
 
 renameSchools <- cbind(oldSchool, newSchool)
@@ -109,31 +160,6 @@ for(i in 1:nrow(renameSchools)) {
   fsmdetails$SchoolName[fsmdetails$SchoolName == oldName] <- newName
 }
 ```
-
-
-St Aelred's RCVA Primary = St Aelred's RC Primary School	
-St Aelreds Rc Primary School = St Aelred's RC Primary School	
-St Aelreds RC Primary School = St Aelred's RC Primary School
-St Barnabas C Of E Primary School = St Barnabas' CE Primary School	
-St Barnabas CE Primary School	= St Barnabas' CE Primary School
-St Georges Rc Primary School = St George's RC Primary School	
-St Georges RC Primary School = St George's RC Primary School
-St Lawrence's Primary School = St Lawrence's CE Primary School	
-St Lawrences CE Primary School = St Lawrence's CE Primary School
-St Marys CE Primary School = St Mary's CE Primary School
-St Marys Ce Primary School = St Mary's CE Primary School
-St Oswald's Primary School = St Oswald's CE Primary School	
-St Oswalds Ce Primary School = St Oswald's CE Primary School	
-St Oswalds CE Primary School = St Oswald's CE Primary School
-St Pauls Ce Primary School = St Paul's CE Primary School	
-St Pauls CE Primary School = St Paul's CE Primary School
-St Wilfrid's Primary School	= St Wilfrid's RC Primary School
-Stockton-on-the-Forest Primary School	= Stockton On The Forest Primary School	
-Vale of York = Vale of York Academy		
-Westfield Primary Community School = Westfield Community Primary School
-Wheldrake CE (Aided) School	= Wheldrake with Thorganby CE Primary School	
-Wheldrake with Thorganby C.E. (Aided) School = Wheldrake with Thorganby CE Primary School	
-York High	= York High School	
 
 ## Replace values <5 and 9999 for 2 in TotalFSM
 
@@ -150,6 +176,12 @@ fsmdetails$TotalFSM[fsmdetails$TotalFSM == '<5'] <- '2'
 fsmdetails$TotalFSM <- as.numeric(as.character(fsmdetails$TotalFSM))
 ```
 
+## Add in new column to show TotalFSM as a percentage of TotalPupils
+
+```{r}
+fsmdetails$TotalFSMPercentage <- (fsmdetails$TotalFSM / fsmdetails$TotalPupils) * 100
+```
+
 # Key findings
 
 Look at percentage of pupils over time, as well as raw number
@@ -157,3 +189,7 @@ Look at percentage of pupils over time, as well as raw number
 # Supporting visualisations
 
 # Top 3 Recommendations
+
+# Reflections
+
+1. Next time count school name occurances to make normalising them easier
