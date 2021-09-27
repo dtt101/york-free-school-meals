@@ -182,11 +182,31 @@ fsmdetails$TotalFSM <- as.numeric(as.character(fsmdetails$TotalFSM))
 fsmdetails$TotalFSMPercentage <- (fsmdetails$TotalFSM / fsmdetails$TotalPupils) * 100
 ```
 
+## Transform data from long to wide
+
+```{r}
+library("reshape2")
+fsmWide <- dcast(fsmdetails, SchoolName ~ Year, value.var="TotalFSMPercentage")
+```
+
+## Export to CSV for use in other tools
+
+```{r}
+write.csv(fsmdetails,"~/Downloads/fsmdetails.csv", row.names = TRUE)
+```
+
+
 # Key findings
 
 Look at percentage of pupils over time, as well as raw number
 
 # Supporting visualisations
+
+```{r}
+# ggplot(fsmdetails, aes(x = Year, y = TotalFSMPercentage, col = SchoolName)) + geom_line()
+# time.series <- ts(fsmdetails[, -1], start=2014, end=2020)
+# plot(time.series)
+```
 
 # Top 3 Recommendations
 
