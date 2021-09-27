@@ -9,17 +9,17 @@ What can we learn about changes in school meal uptake in York from published fre
 
 # Data Sources
 
-Data Source: https://data.yorkopendata.org/dataset/free-school-meals/resource/03b0ae33-f6fe-4431-94f8-4b811c8921ba
+Data Source: <https://data.yorkopendata.org/dataset/free-school-meals/resource/03b0ae33-f6fe-4431-94f8-4b811c8921ba>
 
 The data is published annually by York City Council, UK.
 
 # Data Preparation & Processing
 
- * FSMTaken stops being recorded in 2018
- * Schools are recorded multiple times with different names
- * 9999 is used as a value for FSMTaken and TotalFSM when count <5 upto 2017; https://stackoverflow.com/questions/21187603/replace-characters-from-a-column-of-a-data-frame-r
- * TotalFSM is a <chr>
- * Need to a add a new column showing TotalFSM as a percentage of TotalPupils
+-   FSMTaken stops being recorded in 2018
+-   Schools are recorded multiple times with different names
+-   9999 is used as a value for FSMTaken and TotalFSM when count \<5 upto 2017; <https://stackoverflow.com/questions/21187603/replace-characters-from-a-column-of-a-data-frame-r>
+-   TotalFSM is a <chr>
+-   Need to a add a new column showing TotalFSM as a percentage of TotalPupils
 
 # Analysis
 
@@ -56,7 +56,6 @@ fsmdetails %>%
 ```{r}
 fsmdetails$SchoolName[fsmdetails$SchoolName == "All Saints RC"] <- "All Saints RC School"
 ```
-
 
 ```{r}
 oldSchool = c(
@@ -97,6 +96,7 @@ oldSchool = c(
   "St Oswalds CE Primary School",
   "St Pauls Ce Primary School",
   "St Pauls CE Primary School",
+  "St Pauls Nursery School",
   "St Wilfrid's Primary School",
   "Stockton-on-the-Forest Primary School",
   "Vale of York",
@@ -144,6 +144,7 @@ newSchool = c(
   "St Oswald's CE Primary School",
   "St Paul's CE Primary School",
   "St Paul's CE Primary School",
+  "St Paul's Nursery School",
   "St Wilfrid's RC Primary School",
   "Stockton On The Forest Primary School",
   "Vale of York Academy",
@@ -161,7 +162,7 @@ for(i in 1:nrow(renameSchools)) {
 }
 ```
 
-## Replace values <5 and 9999 for 2 in TotalFSM
+## Replace values \<5 and 9999 for 2 in TotalFSM
 
 I have opted for 2 as a replacement value because it is the median of the value of less than 5.
 
@@ -195,21 +196,35 @@ fsmWide <- dcast(fsmdetails, SchoolName ~ Year, value.var="TotalFSMPercentage")
 write.csv(fsmdetails,"~/Downloads/fsmdetails.csv", row.names = TRUE)
 ```
 
-
 # Key findings
 
-Look at percentage of pupils over time, as well as raw number
+Calculate mean values for each year, ignoring schools with N/A
+
+```{r}
+# Average percentage change
+fsmWide2 <- na.omit(fsmWide)
+mean(fsmWide2$`2014`)
+mean(fsmWide2$`2015`)
+mean(fsmWide2$`2016`)
+mean(fsmWide2$`2017`)
+mean(fsmWide2$`2018`)
+mean(fsmWide2$`2019`)
+mean(fsmWide2$`2020`)
+
+```
 
 # Supporting visualisations
 
+Multiple line plot for each school, showing trends over time
+
 ```{r}
-# ggplot(fsmdetails, aes(x = Year, y = TotalFSMPercentage, col = SchoolName)) + geom_line()
-# time.series <- ts(fsmdetails[, -1], start=2014, end=2020)
-# plot(time.series)
+ggplot(fsmdetails, aes(x = Year, y = TotalFSMPercentage)) + 
+  geom_line(aes(color = SchoolName), size = 1)  + 
+  theme_minimal()
 ```
 
 # Top 3 Recommendations
 
 # Reflections
 
-1. Next time count school name occurances to make normalising them easier
+1.  Next time count school name occurances to make normalising them easier
