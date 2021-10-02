@@ -201,15 +201,21 @@ write.csv(fsmdetails,"~/Downloads/fsmdetails.csv", row.names = TRUE)
 Calculate mean values for each year, ignoring schools with N/A
 
 ```{r}
-# Average percentage change
+# Plotting mean average percentage change
 fsmWide2 <- na.omit(fsmWide)
-mean(fsmWide2$`2014`)
-mean(fsmWide2$`2015`)
-mean(fsmWide2$`2016`)
-mean(fsmWide2$`2017`)
-mean(fsmWide2$`2018`)
-mean(fsmWide2$`2019`)
-mean(fsmWide2$`2020`)
+avgPerc = c(
+  mean(fsmWide2$`2014`),
+  mean(fsmWide2$`2015`),
+  mean(fsmWide2$`2016`),
+  mean(fsmWide2$`2017`),
+  mean(fsmWide2$`2018`),
+  mean(fsmWide2$`2019`),
+  mean(fsmWide2$`2020`)  
+)
+avgDf <- data.frame(years=c("2014", "2015", "2016", "2017", "2018", "2019", "2020"), avg=avgPerc)
+ggplot(data=avgDf, aes(x=years, y=avg, group=1)) +
+  geom_line()+
+  geom_point()
 
 ```
 
