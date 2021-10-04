@@ -233,7 +233,6 @@ ggplot(fsmdetails, aes(x = Year, y = TotalFSMPercentage)) +
 # Reflections
 
  * The number of children taking free school meals in York has risen significantly since 2019.
- * 
 
 # Reflections
 
