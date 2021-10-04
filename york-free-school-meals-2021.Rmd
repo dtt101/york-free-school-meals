@@ -46,7 +46,7 @@ Create pivot table to summarise data, making visual checking easier
 
 ```{r}
 fsmdetails %>%
-  group_by(SchoolName, Year, TotalFSMPercentage) %>%
+  group_by(SchoolName, Year, TotalFSM) %>%
   summarise(SchoolName)
 
 ```
@@ -226,10 +226,14 @@ Multiple line plot for each school, showing trends over time
 ```{r}
 ggplot(fsmdetails, aes(x = Year, y = TotalFSMPercentage)) + 
   geom_line(aes(color = SchoolName), size = 1)  + 
-  theme_minimal()
+  theme_minimal() + 
+   xlab("Year") + ylab("Free School Meal Takeup (%)")
 ```
 
-# Top 3 Recommendations
+# Reflections
+
+ * The number of children taking free school meals in York has risen significantly since 2019.
+ * 
 
 # Reflections
 
